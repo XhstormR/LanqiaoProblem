@@ -6,6 +6,7 @@ import javax.persistence.*
 @Entity
 data class Problem(
         @Id
+        @Column(name = "id")
         var tpid: Int? = null,
         @Column(unique = true)
         var gpid: String? = null,

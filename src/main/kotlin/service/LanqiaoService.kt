@@ -34,22 +34,27 @@ object LanqiaoService {
 
     fun getProblems() = ProblemRepository.getProblems()
 
-    fun saveProblems() = getProblemsFromWeb().also {
-        it.forEach {
-            val detail = ProblemDetail().apply {
-                service.problemPage(it.gpid!!).execute().body().let {
-                    this.description = Jsoup.parse(it).getElementsByClass("des").toString()
-                }
-                service.refCodePage(it.gpid!!).execute().body().let {
-                    val document = Jsoup.parse(it)
-                    this.refCode_c = document.getElementById("codelinesc").toString()
-                    this.refCode_cpp = document.getElementById("codelinescpp").toString()
-                    this.refCode_java = document.getElementById("codelinesjava").toString()
+    fun saveProblems() = getProblemsFromWeb()
+            .also {
+                val n = it.size
+                var i = 0
+                it.forEach {
+                    val detail = ProblemDetail().apply { it.addDetails(this) }
+
+                    service.problemPage(it.gpid!!).execute().body().let {
+                        val document = Jsoup.parse(it)
+                        detail.description = document.getElementsByClass("des").toString()
+                    }
+                    service.refCodePage(it.gpid!!).execute().body().let {
+                        val document = Jsoup.parse(it)
+                        detail.refCode_c = document.getElementById("codelinesc").toString()
+                        detail.refCode_cpp = document.getElementById("codelinescpp").toString()
+                        detail.refCode_java = document.getElementById("codelinesjava").toString()
+                    }
+                    println("$n : ${++i}")
                 }
             }
-            it.addDetails(detail)
-        }
-    }.run { ProblemRepository.saveProblems(this) }
+            .run { ProblemRepository.saveProblems(this) }
 
     fun getProblemsFromWeb(): List<Problem> {
         val list = arrayListOf<Problem>()

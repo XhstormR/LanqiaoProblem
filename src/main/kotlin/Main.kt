@@ -3,12 +3,10 @@ import service.LanqiaoService
 fun main(args: Array<String>) {
     LanqiaoService.saveProblems()
 
-//    LanqiaoService.getProblems().let {
+//    LanqiaoService.getProblemsFromWeb().let {
 //        it.forEach { println(it) }
-//        println("总共 ${it.size} 道题目")
+//        println("试题总数：${it.size}")
 //    }
-
-    LanqiaoService.getProblem(215).let { println(it) }
 
     LanqiaoService.close()
 }

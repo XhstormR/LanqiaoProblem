@@ -26,9 +26,9 @@ object ProblemRepository {
 
     fun getProblemsById(id: Int): Problem = sessionFactory.currentSession.use {
         it.beginTransaction()
-        val student = it.get(Problem::class.java, id)
+        val problem = it.get(Problem::class.java, id)
         it.transaction.commit()
-        student
+        problem
     }
 
     fun close() = sessionFactory.close()
