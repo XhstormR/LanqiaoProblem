@@ -14,7 +14,7 @@ import java.util.*
 object LanqiaoService {
     private val gson = Gson()
     private val service by lazy {
-        val properties = Properties().apply { load(ClassLoader.getSystemResourceAsStream("123.txt")) }
+        val properties = Properties().apply { load(ClassLoader.getSystemResourceAsStream("123.properties")) }
         val client = OkHttpClient.Builder()
                 .addInterceptor {
                     val request = it.request().newBuilder().addHeader("Cookie", properties.getProperty("Cookie")).build()
